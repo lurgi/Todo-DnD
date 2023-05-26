@@ -44,31 +44,29 @@ function Board({ category, boardId }: { category: string[]; boardId: string }) {
     console.log(isAddBox);
   };
   return (
-    <>
-      <Droppable droppableId={boardId}>
-        {(magic, snapshot) => (
-          <Container ref={magic.innerRef} {...magic.droppableProps}>
-            <Title>{boardId.toUpperCase().replaceAll("_", " ")}</Title>
-            {category.map((todo, index) => (
-              <DraggableBoard
-                key={index}
-                index={index}
-                todo={todo}
-              ></DraggableBoard>
-            ))}
-            <FlexCenterDiv>
-              <PlusIconContainer onClick={handleAdd}>
-                <FontAwesomeIcon
-                  icon={icon({ name: "plus", style: "solid" })}
-                  style={{ height: 21, width: 21 }}
-                />
-              </PlusIconContainer>
-            </FlexCenterDiv>
-            {magic.placeholder}
-          </Container>
-        )}
-      </Droppable>
-    </>
+    <Droppable droppableId={boardId} type="item">
+      {(magic, snapshot) => (
+        <Container ref={magic.innerRef} {...magic.droppableProps}>
+          <Title>{boardId.toUpperCase().replaceAll("_", " ")}</Title>
+          {category.map((todo, index) => (
+            <DraggableBoard
+              key={index}
+              index={index}
+              todo={todo}
+            ></DraggableBoard>
+          ))}
+          <FlexCenterDiv>
+            <PlusIconContainer onClick={handleAdd}>
+              <FontAwesomeIcon
+                icon={icon({ name: "plus", style: "solid" })}
+                style={{ height: 21, width: 21 }}
+              />
+            </PlusIconContainer>
+          </FlexCenterDiv>
+          {magic.placeholder}
+        </Container>
+      )}
+    </Droppable>
   );
 }
 

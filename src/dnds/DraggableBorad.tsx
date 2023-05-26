@@ -2,7 +2,7 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { styled } from "styled-components";
 
-const Board = styled.li<{ isDragging: boolean }>`
+const Item = styled.li<{ isDragging: boolean }>`
   background-color: ${(props) =>
     props.isDragging ? "rgb(39, 39, 39)" : "whitesmoke"};
   color: ${(props) => (props.isDragging ? "whitesmoke" : "rgb(5, 5, 5)")};
@@ -21,14 +21,14 @@ function DraggableBoard({ todo, index }: IDraggableBoard) {
   return (
     <Draggable draggableId={todo} index={index} key={todo}>
       {(magic, snapshot) => (
-        <Board
+        <Item
           isDragging={snapshot.isDragging}
           ref={magic.innerRef}
           {...magic.draggableProps}
           {...magic.dragHandleProps}
         >
           {todo}
-        </Board>
+        </Item>
       )}
     </Draggable>
   );

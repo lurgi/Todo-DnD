@@ -10,45 +10,66 @@ import { todoState } from "./atoms";
 import Board from "./dnds/Board";
 
 const Container = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 15px;
+  display: flex;
 `;
 
 export default function Home() {
   const [todos, setTodos] = useRecoilState(todoState);
   const keys = Object.keys(todos);
-  const onDragEnd = ({ destination, source, draggableId }: DropResult) => {
-    console.log(destination, source, draggableId);
+  const onDragEnd = ({
+    destination,
+    source,
+    draggableId,
+    type,
+  }: DropResult) => {
+    console.log(type);
 
     if (typeof destination?.index !== "number") {
       return;
     }
-    setTodos((oldTodos) => {
-      const temp = JSON.parse(JSON.stringify(oldTodos));
-      console.log(temp);
-      const sourceArr = [...oldTodos[source.droppableId].contents];
-      sourceArr.splice(source.index, 1);
-      if (destination.droppableId === source.droppableId) {
-        sourceArr.splice(destination.index, 0, draggableId);
-        temp[source.droppableId].contents = sourceArr;
-        return temp;
-      } else {
-        const destiArr = [...oldTodos[destination.droppableId].contents];
-        destiArr.splice(destination.index, 0, draggableId);
-        temp[source.droppableId].contents = sourceArr;
-        temp[destination.droppableId].contents = destiArr;
-        return temp;
-      }
-    });
+    if (type === "item") {
+      setTodos((oldTodos) => {
+        const temp = JSON.parse(JSON.stringify(oldTodos));
+        const sourceArr = [...oldTodos[source.droppableId].contents];
+        sourceArr.splice(source.index, 1);
+        if (destination.droppableId === source.droppableId) {
+          sourceArr.splice(destination.index, 0, draggableId);
+          temp[source.droppableId].contents = sourceArr;
+          return temp;
+        } else {
+          const destiArr = [...oldTodos[destination.droppableId].contents];
+          destiArr.splice(destination.index, 0, draggableId);
+          temp[source.droppableId].contents = sourceArr;
+          temp[destination.droppableId].contents = destiArr;
+          return temp;
+        }
+      });
+    }
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Container>
-        {keys.map((key, i) => (
-          <Board key={i} category={todos[key].contents} boardId={key} />
-        ))}
-      </Container>
+      <Droppable droppableId="group" type="group" direction="horizontal">
+        {(provided) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            <Container>
+              {keys.map((key, i) => (
+                <Draggable key={i} index={i} draggableId={`list${i}`}>
+                  {(provided) => (
+                    <span
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <Board category={todos[key].contents} boardId={key} />
+                    </span>
+                  )}
+                </Draggable>
+              ))}
+            </Container>
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
     </DragDropContext>
   );
 }
