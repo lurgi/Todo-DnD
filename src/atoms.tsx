@@ -1,19 +1,17 @@
 import { atom } from "recoil";
 
 interface ITodoDetail {
+  id: number;
+  category: string;
   contents: string[];
   isAddBox: boolean;
 }
 
-interface ITodoState {
-  [key: string]: ITodoDetail;
-}
-
-export const todoState = atom<ITodoState>({
+export const todoState = atom<ITodoDetail[]>({
   key: "todos",
-  default: {
-    to_do: { contents: ["a", "b", "c"], isAddBox: false },
-    doing: { contents: ["d", "e", "f"], isAddBox: false },
-    done: { contents: ["h", "i", "j"], isAddBox: false },
-  },
+  default: [
+    { id: 0, category: "To Do", contents: ["a", "b", "c"], isAddBox: false },
+    { id: 1, category: "Doing", contents: ["d", "e", "f"], isAddBox: false },
+    { id: 2, category: "Done", contents: ["h", "i", "j"], isAddBox: false },
+  ],
 });

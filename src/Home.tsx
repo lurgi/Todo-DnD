@@ -15,34 +15,54 @@ const Container = styled.div`
 
 export default function Home() {
   const [todos, setTodos] = useRecoilState(todoState);
-  const keys = Object.keys(todos);
   const onDragEnd = ({
     destination,
     source,
     draggableId,
     type,
   }: DropResult) => {
-    console.log(type);
-
-    if (typeof destination?.index !== "number") {
-      return;
-    }
-    if (type === "item") {
+    if (destination && type === "item") {
+      if (destination.droppableId === source.droppableId) {
+        setTodos((oldTodos) => {
+          const returnTodos = [];
+          for (let oldTodo of oldTodos) {
+            if (oldTodo.id + "" === destination.droppableId) {
+              const newTodo = JSON.parse(JSON.stringify(oldTodo));
+              newTodo.contents.splice(source.index, 1);
+              newTodo.contents.splice(destination.index, 0, draggableId);
+              returnTodos.push(newTodo);
+            } else {
+              returnTodos.push(oldTodo);
+            }
+          }
+          return returnTodos;
+        });
+      } else {
+        setTodos((oldTodos) => {
+          const returnTodos = [];
+          for (let oldTodo of oldTodos) {
+            if (oldTodo.id + "" === destination.droppableId) {
+              const newTodo = JSON.parse(JSON.stringify(oldTodo));
+              newTodo.contents.splice(destination.index, 0, draggableId);
+              returnTodos.push(newTodo);
+            } else if (oldTodo.id + "" === source.droppableId) {
+              const newTodo = JSON.parse(JSON.stringify(oldTodo));
+              newTodo.contents.splice(source.index, 1);
+              returnTodos.push(newTodo);
+            } else {
+              returnTodos.push(oldTodo);
+            }
+          }
+          return returnTodos;
+        });
+      }
+    } else if (destination && type === "group") {
       setTodos((oldTodos) => {
-        const temp = JSON.parse(JSON.stringify(oldTodos));
-        const sourceArr = [...oldTodos[source.droppableId].contents];
-        sourceArr.splice(source.index, 1);
-        if (destination.droppableId === source.droppableId) {
-          sourceArr.splice(destination.index, 0, draggableId);
-          temp[source.droppableId].contents = sourceArr;
-          return temp;
-        } else {
-          const destiArr = [...oldTodos[destination.droppableId].contents];
-          destiArr.splice(destination.index, 0, draggableId);
-          temp[source.droppableId].contents = sourceArr;
-          temp[destination.droppableId].contents = destiArr;
-          return temp;
-        }
+        const sourceObj = JSON.parse(JSON.stringify(oldTodos[source.index]));
+        const newTodos = JSON.parse(JSON.stringify(oldTodos));
+        newTodos.splice(source.index, 1);
+        newTodos.splice(destination.index, 0, sourceObj);
+        return newTodos;
       });
     }
   };
@@ -52,15 +72,23 @@ export default function Home() {
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             <Container>
-              {keys.map((key, i) => (
-                <Draggable key={i} index={i} draggableId={`list${i}`}>
+              {todos.map((value, index) => (
+                <Draggable
+                  key={value.id}
+                  index={index}
+                  draggableId={value.id + ""}
+                >
                   {(provided) => (
                     <span
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <Board category={todos[key].contents} boardId={key} />
+                      <Board
+                        contents={value.contents}
+                        boardId={value.id + ""}
+                        category={value.category}
+                      />
                     </span>
                   )}
                 </Draggable>

@@ -3,13 +3,17 @@ import { styled } from "styled-components";
 import DraggableBoard from "./DraggableBorad";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { watch } from "fs";
 
 const Container = styled.ul`
   width: 250px;
   background-color: gray;
   padding: 15px;
   border-radius: 5px;
+  position: relative;
+  padding-bottom: 70px;
 `;
 const Title = styled.h2`
   font-weight: 600;
@@ -31,38 +35,73 @@ const PlusIconContainer = styled.div`
     cursor: pointer;
   }
 `;
-const FlexCenterDiv = styled.div`
-  display: flex;
-  justify-content: center;
+const AddIconDiv = styled.div`
   transition: all 0.2s ease-in-out;
+  position: absolute;
+  bottom: 10px;
+  right: 50%;
+  transform: translateX(50%);
 `;
 
-function Board({ category, boardId }: { category: string[]; boardId: string }) {
+function Board({
+  contents,
+  boardId,
+  category,
+}: {
+  contents: string[];
+  boardId: string;
+  category: string;
+}) {
   const [isAddBox, setIsAddBox] = useState(false);
   const handleAdd = () => {
     setIsAddBox(true);
     console.log(isAddBox);
   };
+  const handleBlur = () => {
+    // setIsAddBox(false);
+  };
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (inputRef) {
+      inputRef?.current?.focus();
+    }
+  }, [isAddBox]);
+
+  const { register, handleSubmit, watch } = useForm();
+  const onValid = (data: any) => {
+    console.log("앋놰");
+  };
   return (
     <Droppable droppableId={boardId} type="item">
       {(magic, snapshot) => (
         <Container ref={magic.innerRef} {...magic.droppableProps}>
-          <Title>{boardId.toUpperCase().replaceAll("_", " ")}</Title>
-          {category.map((todo, index) => (
+          <Title>{category}</Title>
+          {contents.map((todo, index) => (
             <DraggableBoard
               key={index}
               index={index}
               todo={todo}
             ></DraggableBoard>
           ))}
-          <FlexCenterDiv>
+          <form onSubmit={handleSubmit(onValid)}>
+            <input
+              {...register("newContent", {
+                required: true,
+                ref: { inputRef },
+              })}
+              placeholder="Write..."
+              // ref={inputRef}
+              onBlur={handleBlur}
+            />
+          </form>
+          <AddIconDiv>
             <PlusIconContainer onClick={handleAdd}>
               <FontAwesomeIcon
                 icon={icon({ name: "plus", style: "solid" })}
                 style={{ height: 21, width: 21 }}
               />
             </PlusIconContainer>
-          </FlexCenterDiv>
+          </AddIconDiv>
           {magic.placeholder}
         </Container>
       )}

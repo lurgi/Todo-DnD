@@ -17,7 +17,6 @@ interface IDraggableBoard {
 }
 
 function DraggableBoard({ todo, index }: IDraggableBoard) {
-  console.log(todo);
   return (
     <Draggable draggableId={todo} index={index} key={todo}>
       {(magic, snapshot) => (
