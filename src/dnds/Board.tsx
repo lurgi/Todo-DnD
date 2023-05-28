@@ -6,6 +6,8 @@ import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { watch } from "fs";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { todoState } from "../atoms";
 
 const Container = styled.ul`
   width: 250px;
@@ -43,6 +45,12 @@ const AddIconDiv = styled.div`
   transform: translateX(50%);
 `;
 
+const AddInput = styled.input`
+  width: 100%;
+  margin-top: 5px;
+  height: 30px;
+`;
+
 function Board({
   contents,
   boardId,
@@ -52,24 +60,28 @@ function Board({
   boardId: string;
   category: string;
 }) {
+  const setState = useSetRecoilState(todoState);
   const [isAddBox, setIsAddBox] = useState(false);
-  const handleAdd = () => {
-    setIsAddBox(true);
-    console.log(isAddBox);
+  const { register, handleSubmit, watch, setFocus, reset } = useForm();
+  const handleAdd = async () => {
+    await setIsAddBox(true);
+    setFocus("newContent");
   };
   const handleBlur = () => {
-    // setIsAddBox(false);
+    setIsAddBox(false);
+    reset();
   };
-  const inputRef = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    if (inputRef) {
-      inputRef?.current?.focus();
-    }
-  }, [isAddBox]);
-
-  const { register, handleSubmit, watch } = useForm();
   const onValid = (data: any) => {
-    console.log("앋놰");
+    setState((oldTodos) => {
+      const newTodos = JSON.parse(JSON.stringify(oldTodos));
+      for (let newTodo of newTodos) {
+        if (newTodo.category === category) {
+          newTodo.contents.push(data.newContent);
+        }
+      }
+      return newTodos;
+    });
+    reset();
   };
   return (
     <Droppable droppableId={boardId} type="item">
@@ -81,19 +93,20 @@ function Board({
               key={index}
               index={index}
               todo={todo}
+              category={category}
             ></DraggableBoard>
           ))}
-          <form onSubmit={handleSubmit(onValid)}>
-            <input
-              {...register("newContent", {
-                required: true,
-                ref: { inputRef },
-              })}
-              placeholder="Write..."
-              // ref={inputRef}
-              onBlur={handleBlur}
-            />
-          </form>
+          {isAddBox ? (
+            <form onSubmit={handleSubmit(onValid)}>
+              <AddInput
+                {...register("newContent", {
+                  required: true,
+                })}
+                placeholder="Write..."
+                onBlur={handleBlur}
+              />
+            </form>
+          ) : null}
           <AddIconDiv>
             <PlusIconContainer onClick={handleAdd}>
               <FontAwesomeIcon
