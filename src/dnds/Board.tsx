@@ -3,52 +3,68 @@ import { styled } from "styled-components";
 import DraggableBoard from "./DraggableBorad";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { watch } from "fs";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { todoState } from "../atoms";
 
 const Container = styled.ul`
-  width: 250px;
-  background-color: gray;
+  width: 100%;
+  background-color: ${(props) => props.theme.cardBgColor};
   padding: 15px;
   border-radius: 5px;
   position: relative;
-  padding-bottom: 70px;
+  transition: all 0.2s ease-in-out;
+  padding-bottom: 50px;
 `;
 const Title = styled.h2`
   font-weight: 600;
   color: rgb(5, 5, 5);
   margin-bottom: 10px;
 `;
-const PlusIconContainer = styled.div`
-  background-color: #e4a8a8;
-  border-radius: 50px;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 5px;
-  transition: all 0.1s ease-in-out;
+const AddIconDiv = styled.div`
+  transition: all 0.2s ease-in-out;
+  margin-top: 20px;
+  font-weight: 500;
+  position: absolute;
+  bottom: 10px;
   &:hover {
-    background-color: #d89f9f;
+    color: ${(props) => props.theme.accentColor};
     cursor: pointer;
   }
 `;
-const AddIconDiv = styled.div`
-  transition: all 0.2s ease-in-out;
-  position: absolute;
-  bottom: 10px;
-  right: 50%;
-  transform: translateX(50%);
+
+const AddForm = styled.form`
+  margin-top: 5px;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  background-color: ${(props) => props.theme.cardBgColorLight};
+  border-radius: 5px;
 `;
 
 const AddInput = styled.input`
+  display: flex;
   width: 100%;
-  margin-top: 5px;
   height: 30px;
+  border-radius: 5px;
+  padding-left: 5px;
+  background-color: ${(props) => props.theme.cardBgColorLight};
+  &:focus {
+    border: 2px solid ${(props) => props.theme.accentColor};
+    outline: none;
+  }
+`;
+
+const AddBtn = styled.button`
+  background: none;
+  border: none;
+  outline: none;
+  color: rgba(5, 5, 5, 0.2);
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    color: ${(props) => props.theme.accentColor};
+  }
 `;
 
 function Board({
@@ -62,7 +78,7 @@ function Board({
 }) {
   const setState = useSetRecoilState(todoState);
   const [isAddBox, setIsAddBox] = useState(false);
-  const { register, handleSubmit, watch, setFocus, reset } = useForm();
+  const { register, handleSubmit, setFocus, reset } = useForm();
   const handleAdd = async () => {
     await setIsAddBox(true);
     setFocus("newContent");
@@ -97,7 +113,7 @@ function Board({
             ></DraggableBoard>
           ))}
           {isAddBox ? (
-            <form onSubmit={handleSubmit(onValid)}>
+            <AddForm onSubmit={handleSubmit(onValid)}>
               <AddInput
                 {...register("newContent", {
                   required: true,
@@ -105,15 +121,20 @@ function Board({
                 placeholder="Write..."
                 onBlur={handleBlur}
               />
-            </form>
+              <AddBtn type="submit">
+                <FontAwesomeIcon
+                  icon={icon({ name: "plus", style: "solid" })}
+                  style={{ height: 16, width: 16 }}
+                />
+              </AddBtn>
+            </AddForm>
           ) : null}
-          <AddIconDiv>
-            <PlusIconContainer onClick={handleAdd}>
-              <FontAwesomeIcon
-                icon={icon({ name: "plus", style: "solid" })}
-                style={{ height: 21, width: 21 }}
-              />
-            </PlusIconContainer>
+          <AddIconDiv onClick={handleAdd}>
+            <FontAwesomeIcon
+              icon={icon({ name: "plus", style: "solid" })}
+              style={{ height: 16, width: 16, marginRight: 2 }}
+            />
+            {`Add New ${category}`}
           </AddIconDiv>
           {magic.placeholder}
         </Container>

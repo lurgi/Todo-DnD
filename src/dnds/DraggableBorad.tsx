@@ -8,7 +8,7 @@ import { todoState } from "../atoms";
 
 const Item = styled.li<{ isDragging: boolean }>`
   background-color: ${(props) =>
-    props.isDragging ? "rgb(39, 39, 39)" : "whitesmoke"};
+    props.isDragging ? "rgb(39, 39, 39)" : props.theme.cardBgColorLight};
   color: ${(props) => (props.isDragging ? "whitesmoke" : "rgb(5, 5, 5)")};
   padding: 5px;
   margin-top: 5px;
@@ -16,13 +16,17 @@ const Item = styled.li<{ isDragging: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-left: 5px;
+  font-size: 18px;
+  transition: all 0.2s ease-in-out;
 `;
 
 const IconContainer = styled.div`
-  opacity: 0;
+  opacity: 0.2;
   transition: all 0.2s ease-in-out;
   &:hover {
     opacity: 1;
+    color: ${(props) => props.theme.accentColor};
     cursor: pointer;
   }
 `;

@@ -9,8 +9,22 @@ import { styled } from "styled-components";
 import { todoState } from "./atoms";
 import Board from "./dnds/Board";
 
-const Container = styled.div`
+const HomeContainer = styled.div`
+  padding-top: 50px;
   display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+`;
+
+const BoardContainer = styled.div`
+  width: 80vw;
+  max-width: 600px;
+  margin-bottom: 20px;
 `;
 
 export default function Home() {
@@ -67,11 +81,11 @@ export default function Home() {
     }
   };
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="group" type="group" direction="horizontal">
-        {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
-            <Container>
+    <HomeContainer>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="group" type="group" /*direction="horizontal"*/>
+          {(provided) => (
+            <Container {...provided.droppableProps} ref={provided.innerRef}>
               {todos.map((value, index) => (
                 <Draggable
                   key={value.id}
@@ -79,7 +93,7 @@ export default function Home() {
                   draggableId={value.id + ""}
                 >
                   {(provided) => (
-                    <span
+                    <BoardContainer
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
@@ -89,15 +103,15 @@ export default function Home() {
                         boardId={value.id + ""}
                         category={value.category}
                       />
-                    </span>
+                    </BoardContainer>
                   )}
                 </Draggable>
               ))}
+              {provided.placeholder}
             </Container>
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </HomeContainer>
   );
 }

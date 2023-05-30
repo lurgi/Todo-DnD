@@ -1,8 +1,9 @@
+import { light } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { DefaultTheme } from "styled-components";
 
-export const darkTheme: DefaultTheme = {
-  bgColor: "#2f3640",
+export const Theme: DefaultTheme = {
   textColor: "white",
   accentColor: "#9c88ff",
-  cardBgColor: "transparent",
+  cardBgColor: "#ced6e0",
+  cardBgColorLight: "#f1f2f6",
 };

@@ -56,16 +56,20 @@ table {
   box-sizing: border-box;
 }
 body {
+  height: 100vh;
+  width: 100vw;
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
   color: ${(props) => props.theme.textColor};
-  background-color: ${(props) => props.theme.bgColor};
+  background: linear-gradient(135deg,#8ee6b3,rgba(46, 213, 115,1.0));
   line-height: 1.2;
+  overflow-x: hidden;
 }
 a {
   text-decoration:none;
   color:inherit;
 }
+
 `;
 
 function App() {
