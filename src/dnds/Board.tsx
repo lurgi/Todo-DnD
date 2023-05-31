@@ -17,17 +17,22 @@ const Container = styled.ul`
   transition: all 0.2s ease-in-out;
   padding-bottom: 50px;
 `;
+const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 const Title = styled.h2`
   font-weight: 600;
   color: rgb(5, 5, 5);
   margin-bottom: 10px;
 `;
+const TitleIcon = styled.div``;
 const AddIconDiv = styled.div`
   transition: all 0.2s ease-in-out;
-  margin-top: 20px;
+  margin-top: 30px;
   font-weight: 500;
   position: absolute;
-  bottom: 10px;
+  bottom: 15px;
   &:hover {
     color: ${(props) => props.theme.accentColor};
     cursor: pointer;
@@ -64,6 +69,7 @@ const AddBtn = styled.button`
   transition: all 0.2s ease-in-out;
   &:hover {
     color: ${(props) => props.theme.accentColor};
+    cursor: pointer;
   }
 `;
 
@@ -103,7 +109,15 @@ function Board({
     <Droppable droppableId={boardId} type="item">
       {(magic, snapshot) => (
         <Container ref={magic.innerRef} {...magic.droppableProps}>
-          <Title>{category}</Title>
+          <TitleContainer>
+            <Title>{category}</Title>
+            <TitleIcon>
+              <FontAwesomeIcon
+                style={{ width: 22, height: 22 }}
+                icon={icon({ name: "bars", style: "solid" })}
+              ></FontAwesomeIcon>
+            </TitleIcon>
+          </TitleContainer>
           {contents.map((todo, index) => (
             <DraggableBoard
               key={index}
@@ -134,7 +148,7 @@ function Board({
               icon={icon({ name: "plus", style: "solid" })}
               style={{ height: 16, width: 16, marginRight: 2 }}
             />
-            {`Add New ${category}`}
+            {`${category} 추가하기`}
           </AddIconDiv>
           {magic.placeholder}
         </Container>
