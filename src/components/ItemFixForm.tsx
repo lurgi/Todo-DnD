@@ -1,6 +1,6 @@
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
@@ -73,7 +73,7 @@ function ItemFixForm({ value, index, onBlur, category }: IFixFormProps) {
   };
   useEffect(() => {
     setFocus("fixItem");
-  }, []);
+  }, [setFocus]);
   return (
     <AddForm onSubmit={handleSubmit(onValid)} onBlur={onBlur}>
       <AddInput

@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { useSetRecoilState } from "recoil";
-import { keyframes, styled } from "styled-components";
+import { styled } from "styled-components";
 import { todoState } from "../atoms";
 import ItemFixForm from "../components/ItemFixForm";
+import MenuContainer from "../components/MenuContainer";
 
 const Item = styled.li`
   background-color: ${(props) => props.theme.cardBgColorLight};
@@ -30,15 +31,6 @@ const IconMenuContainer = styled.div`
   transition: all 0.2 ease-in-out;
 `;
 
-const fadeIn = keyframes`
-  from{
-    opacity: 0;
-  }
-  to{
-    opacity: 1;
-  }
-`;
-
 const IconContainer = styled.div<{ isOpenMenu: boolean }>`
   color: ${(props) => props.theme.cardBgColor};
   transition: all 0.2s ease-in-out;
@@ -53,31 +45,6 @@ const IconContainer = styled.div<{ isOpenMenu: boolean }>`
     color: ${(props) => props.theme.accentColor};
     cursor: pointer;
     background-color: ${(props) => props.theme.cardBgColor};
-  }
-`;
-const MenuContainer = styled.div`
-  position: absolute;
-  z-index: 999;
-  font-size: 13px;
-  width: 70px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 6px;
-  right: 0;
-  background-color: ${(props) => props.theme.cardBgColor};
-  border-radius: 5px;
-  border: 1px solid ${(props) => props.theme.accentColor};
-  animation: ${fadeIn} 0.2s ease-in-out;
-  color: ${(props) => props.theme.textColor};
-  font-weight: 500;
-  & span {
-    margin: 2px;
-    transition: all 0.2s ease-in-out;
-    &:hover {
-      color: ${(props) => props.theme.accentColor};
-    }
   }
 `;
 
@@ -153,7 +120,7 @@ function DraggableBoard({ todo, index, category }: IDraggableBoard) {
               ></FontAwesomeIcon>
             </IconContainer>
             {isopenmenu ? (
-              <MenuContainer ref={menuRef}>
+              <MenuContainer containerRef={menuRef}>
                 <span onClick={handleFix}>수정하기</span>
                 <span onClick={handleDelete}>삭제하기</span>
               </MenuContainer>
