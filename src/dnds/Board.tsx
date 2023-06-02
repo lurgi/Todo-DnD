@@ -9,7 +9,7 @@ import { useSetRecoilState } from "recoil";
 import { todoState } from "../atoms";
 import BoardMenu from "../components/BoardMenu";
 
-const Container = styled.ul`
+const Container = styled.div`
   width: 100%;
   background-color: ${(props) => props.theme.cardBgColor};
   padding: 15px;
@@ -116,6 +116,7 @@ function Board({
   const handleAdd = async () => {
     await setIsAddBox(true);
     setFocus("newContent");
+    reset();
   };
   const handleBlur = () => {
     setIsAddBox(false);
@@ -177,7 +178,12 @@ function Board({
             ) : (
               <Title>{category}</Title>
             )}
-            <BoardMenu setFocus={setFocus} setState={setIsCategoryModify} />
+            <BoardMenu
+              boardId={boardId}
+              category={category}
+              setFocus={setFocus}
+              setState={setIsCategoryModify}
+            />
           </TitleContainer>
           {contents.map((todo, index) => (
             <DraggableBoard

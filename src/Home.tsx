@@ -8,6 +8,7 @@ import { useRecoilState } from "recoil";
 import { styled } from "styled-components";
 import { todoState } from "./atoms";
 import Board from "./dnds/Board";
+import AddCategroy from "./components/AddCategory";
 
 const HomeContainer = styled.div`
   padding-top: 50px;
@@ -108,6 +109,7 @@ export default function Home() {
                 </Draggable>
               ))}
               {provided.placeholder}
+              <AddCategroy />
             </Container>
           )}
         </Droppable>
