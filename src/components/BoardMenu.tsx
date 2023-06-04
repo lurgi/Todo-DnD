@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import MenuContainer from "./MenuContainer";
 import styled from "styled-components";
 import DeleteAlert from "./DeleteAlert";
+import { useSetRecoilState } from "recoil";
+import { alertState } from "../atoms";
 
 const Wrapper = styled.div`
   position: relative;
@@ -29,7 +31,7 @@ function BoardMenu({
   category: string;
 }) {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const setIsOpenAlert = useSetRecoilState(alertState);
   const boardMenuRef = useRef<HTMLDivElement>(null);
   const handleFix = async () => {
     await setState(true);
@@ -37,7 +39,8 @@ function BoardMenu({
     setFocus("category");
   };
   const handleDelete = () => {
-    setIsOpenAlert(true);
+    setIsOpenAlert({ category, boardId, show: true });
+    setIsOpenMenu(false);
   };
   useEffect(() => {
     const handleIsOpen = (event: MouseEvent) => {
@@ -68,11 +71,8 @@ function BoardMenu({
       {isOpenMenu ? (
         <MenuContainer containerRef={boardMenuRef}>
           <span onClick={handleFix}>이름수정</span>
-          <span onClick={handleDelete}>전체삭제</span>
+          <span onClick={handleDelete}>항목삭제</span>
         </MenuContainer>
-      ) : null}
-      {isOpenAlert ? (
-        <DeleteAlert boardId={boardId} category={category}></DeleteAlert>
       ) : null}
     </Wrapper>
   );

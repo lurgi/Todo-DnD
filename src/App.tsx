@@ -2,6 +2,9 @@ import React from "react";
 import { createGlobalStyle } from "styled-components";
 import Home from "./Home";
 import Header from "./components/Header";
+import { useRecoilValue } from "recoil";
+import { alertState } from "./atoms";
+import DeleteAlert from "./components/DeleteAlert";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -73,9 +76,11 @@ a {
 `;
 
 function App() {
+  const alertValue = useRecoilValue(alertState);
   return (
     <>
       <GlobalStyle />
+      {alertValue.show ? <DeleteAlert state={alertValue} /> : null}
       <Header />
       <Home />
     </>

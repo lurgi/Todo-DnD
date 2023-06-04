@@ -6,5 +6,6 @@ declare module "styled-components" {
     accentColor: string;
     cardBgColor: string;
     cardBgColorLight: string;
+    reverseTextColor: string;
   }
 }

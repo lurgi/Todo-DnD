@@ -15,3 +15,17 @@ export const todoState = atom<ITodoDetail[]>({
     { id: 2, category: "Done", contents: ["h", "i", "j"], isAddBox: false },
   ],
 });
+
+export interface IAlert {
+  category: string | null;
+  show: boolean;
+  boardId: string | null;
+}
+export const alertState = atom<IAlert>({
+  key: "alert",
+  default: {
+    category: null,
+    show: false,
+    boardId: null,
+  },
+});
