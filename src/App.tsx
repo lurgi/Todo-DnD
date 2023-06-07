@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createGlobalStyle } from "styled-components";
 import Home from "./Home";
-import Header from "./components/Header";
 import { useRecoilValue } from "recoil";
-import { alertState } from "./atoms";
+import { alertState, todoState } from "./atoms";
 import DeleteAlert from "./components/DeleteAlert";
 
 const GlobalStyle = createGlobalStyle`
@@ -64,7 +63,7 @@ body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
   color: ${(props) => props.theme.textColor};
-  background: linear-gradient(135deg,#8ee6b3,rgba(46, 213, 115,1.0));
+  background: linear-gradient(135deg,#686de0,#95afc0);
   line-height: 1.2;
   overflow-x: hidden;
 }
@@ -77,11 +76,14 @@ a {
 
 function App() {
   const alertValue = useRecoilValue(alertState);
+  const todos = useRecoilValue(todoState);
+  useEffect(() => {
+    localStorage.setItem("todo-state", JSON.stringify(todos));
+  }, [todos]);
   return (
     <>
       <GlobalStyle />
       {alertValue.show ? <DeleteAlert state={alertValue} /> : null}
-      <Header />
       <Home />
     </>
   );

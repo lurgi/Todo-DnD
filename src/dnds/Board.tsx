@@ -33,10 +33,10 @@ const Title = styled.h2`
 `;
 const AddIconDiv = styled.div`
   transition: all 0.2s ease-in-out;
-  margin-top: 30px;
   font-weight: 500;
-  position: absolute;
+  margin-right: 15px;
   bottom: 15px;
+  position: absolute;
   &:hover {
     color: ${(props) => props.theme.accentColor};
     cursor: pointer;
@@ -100,12 +100,17 @@ const ChangeBtn = styled.button`
   }
 `;
 
+interface IContents {
+  id: number;
+  content: string;
+}
+
 function Board({
   contents,
   boardId,
   category,
 }: {
-  contents: string[];
+  contents: IContents[];
   boardId: string;
   category: string;
 }) {
@@ -130,7 +135,7 @@ function Board({
       const newTodos = JSON.parse(JSON.stringify(oldTodos));
       for (let newTodo of newTodos) {
         if (newTodo.category === category) {
-          newTodo.contents.push(data.newContent);
+          newTodo.contents.push({ id: Date.now(), content: data.newContent });
         }
       }
       return newTodos;
@@ -189,7 +194,8 @@ function Board({
             <DraggableBoard
               key={index}
               index={index}
-              todo={todo}
+              content={todo.content}
+              contentId={todo.id}
               category={category}
             ></DraggableBoard>
           ))}

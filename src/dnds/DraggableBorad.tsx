@@ -49,12 +49,18 @@ const IconContainer = styled.div<{ isOpenMenu: boolean }>`
 `;
 
 interface IDraggableBoard {
-  todo: string;
   index: number;
   category: string;
+  content: string;
+  contentId: number;
 }
 
-function DraggableBoard({ todo, index, category }: IDraggableBoard) {
+function DraggableBoard({
+  content,
+  contentId,
+  index,
+  category,
+}: IDraggableBoard) {
   const setState = useSetRecoilState(todoState);
   const [isopenmenu, setIsOpenMenu] = useState(false);
   const [isopeninput, setIsOpenInput] = useState(false);
@@ -92,7 +98,7 @@ function DraggableBoard({ todo, index, category }: IDraggableBoard) {
     };
   }, []);
   return (
-    <Draggable draggableId={todo} index={index} key={todo}>
+    <Draggable draggableId={contentId + ""} index={index} key={contentId}>
       {(magic, snapshot) => (
         <Item
           ref={magic.innerRef}
@@ -101,13 +107,13 @@ function DraggableBoard({ todo, index, category }: IDraggableBoard) {
         >
           {isopeninput ? (
             <ItemFixForm
-              value={todo}
+              value={content}
               index={index}
               onBlur={onBlur}
               category={category}
             />
           ) : (
-            <ItemText>{todo}</ItemText>
+            <ItemText>{content}</ItemText>
           )}
           <IconMenuContainer>
             <IconContainer

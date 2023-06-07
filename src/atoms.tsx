@@ -1,19 +1,22 @@
 import { atom } from "recoil";
 
+interface IContents {
+  id: number;
+  content: string;
+}
+
 interface ITodoDetail {
   id: number;
   category: string;
-  contents: string[];
+  contents: IContents[];
   isAddBox: boolean;
 }
 
 export const todoState = atom<ITodoDetail[]>({
   key: "todos",
-  default: [
-    { id: 0, category: "To Do", contents: ["a", "b", "c"], isAddBox: false },
-    { id: 1, category: "Doing", contents: ["d", "e", "f"], isAddBox: false },
-    { id: 2, category: "Done", contents: ["h", "i", "j"], isAddBox: false },
-  ],
+  default: localStorage.getItem("todo-state")
+    ? JSON.parse(localStorage.getItem("todo-state")!)
+    : [],
 });
 
 export interface IAlert {
