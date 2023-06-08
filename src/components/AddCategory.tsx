@@ -27,7 +27,7 @@ const IconBox = styled.div`
   padding: 5px;
   border-radius: 100%;
   border: 2px solid ${(props) => props.theme.cardBgColor};
-  transition: all 0.2s ease-in-out;
+  transition: border 0.2s ease-in-out, color 0.2s ease-in-out;
   animation: ${fadeIn} 0.3s ease-in-out;
   &:hover {
     border-color: ${(props) => props.theme.accentColor};
@@ -42,7 +42,6 @@ const Container = styled.div`
   padding: 15px;
   border-radius: 5px;
   position: relative;
-  transition: all 0.2s ease-in-out;
   margin-bottom: 15px;
   animation: ${fadeIn} 0.3s ease-in-out;
 `;
@@ -104,7 +103,7 @@ function AddCategroy() {
     setState((oldTodos) => {
       return [
         ...oldTodos,
-        { id: oldTodos.length, category, contents: [], isAddBox: false },
+        { id: Date.now(), category, contents: [], isAddBox: false },
       ];
     });
     reset();

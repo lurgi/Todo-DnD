@@ -6,7 +6,7 @@ import { alertState, todoState } from "./atoms";
 import DeleteAlert from "./components/DeleteAlert";
 
 const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Roboto:wght@400;500;700;900&display=swap');
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -60,11 +60,12 @@ table {
 body {
   height: 100vh;
   width: 100vw;
-  font-weight: 300;
-  font-family: 'Source Sans Pro', sans-serif;
   color: ${(props) => props.theme.textColor};
   background: linear-gradient(135deg,#686de0,#95afc0);
   line-height: 1.2;
+  font-family: 'Roboto', sans-serif;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 500;
   overflow-x: hidden;
 }
 a {

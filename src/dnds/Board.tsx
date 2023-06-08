@@ -1,5 +1,5 @@
 import { Droppable } from "react-beautiful-dnd";
-import { styled } from "styled-components";
+import { keyframes, styled } from "styled-components";
 import DraggableBoard from "./DraggableBorad";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
@@ -9,13 +9,21 @@ import { useSetRecoilState } from "recoil";
 import { todoState } from "../atoms";
 import BoardMenu from "../components/BoardMenu";
 
+const fadeIn = keyframes`
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+`;
+
 const Container = styled.div`
   width: 100%;
   background-color: ${(props) => props.theme.cardBgColor};
   padding: 15px;
   border-radius: 5px;
   position: relative;
-  transition: all 0.2s ease-in-out;
   padding-bottom: 50px;
 `;
 const TitleContainer = styled.div`
@@ -33,7 +41,7 @@ const Title = styled.h2`
 `;
 const AddIconDiv = styled.div`
   transition: all 0.2s ease-in-out;
-  font-weight: 500;
+  font-weight: 400;
   margin-right: 15px;
   bottom: 15px;
   position: absolute;
@@ -49,12 +57,16 @@ const AddForm = styled.form`
   justify-content: space-between;
   background-color: ${(props) => props.theme.cardBgColorLight};
   border-radius: 5px;
+  animation: ${fadeIn} 0.3s ease-in-out;
 `;
 const AddInput = styled.input`
   display: flex;
   width: 100%;
   height: 30px;
   border-radius: 5px;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   background-color: ${(props) => props.theme.cardBgColorLight};
   &:focus {
     border: 2px solid ${(props) => props.theme.accentColor};
@@ -72,6 +84,7 @@ const AddBtn = styled.button`
     cursor: pointer;
   }
 `;
+
 const TitleForm = styled.form`
   width: 80%;
   display: flex;
@@ -93,7 +106,7 @@ const ChangeBtn = styled.button`
   border: none;
   outline: none;
   color: ${(props) => props.theme.cardBgColorLight};
-  transition: all 0.2s ease-in-out;
+  transition: color 0.2s ease-in-out;
   &:hover {
     color: ${(props) => props.theme.accentColor};
     cursor: pointer;
@@ -141,6 +154,7 @@ function Board({
       return newTodos;
     });
     reset();
+    handleBlur();
   };
   const onCategoryValid = (data: any) => {
     setState((oldTodos) => {

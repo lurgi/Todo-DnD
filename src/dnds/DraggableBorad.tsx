@@ -8,7 +8,7 @@ import { todoState } from "../atoms";
 import ItemFixForm from "../components/ItemFixForm";
 import MenuContainer from "../components/MenuContainer";
 
-const Item = styled.li`
+const Item = styled.li<{ snapshot: boolean }>`
   background-color: ${(props) => props.theme.cardBgColorLight};
   color: rgb(5, 5, 5);
   margin-top: 5px;
@@ -16,10 +16,14 @@ const Item = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 18px;
-  transition: all 0.2s ease-in-out;
+  font-size: 15px;
+  transition: box-shadow 0.5s ease;
   position: relative;
   min-height: 32px;
+  box-shadow: ${(props) =>
+    props.snapshot
+      ? " 0px 3px 10px 2px gray"
+      : "0px 1px 3px 0px rgba(5,5,5,0.2)"};
 `;
 
 const ItemText = styled.span`
@@ -33,7 +37,7 @@ const IconMenuContainer = styled.div`
 
 const IconContainer = styled.div<{ isOpenMenu: boolean }>`
   color: ${(props) => props.theme.cardBgColor};
-  transition: all 0.2s ease-in-out;
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -101,6 +105,7 @@ function DraggableBoard({
     <Draggable draggableId={contentId + ""} index={index} key={contentId}>
       {(magic, snapshot) => (
         <Item
+          snapshot={snapshot.isDragging}
           ref={magic.innerRef}
           {...magic.draggableProps}
           {...magic.dragHandleProps}

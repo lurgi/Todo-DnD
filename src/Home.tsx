@@ -5,11 +5,20 @@ import {
   Droppable,
 } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
-import { styled } from "styled-components";
+import { keyframes, styled } from "styled-components";
 import { todoState } from "./atoms";
 import Board from "./dnds/Board";
 import AddCategroy from "./components/AddCategory";
 import { useEffect, useState } from "react";
+
+const fadeIn = keyframes`
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+`;
 
 const HomeContainer = styled.div`
   padding-top: 50px;
@@ -33,21 +42,21 @@ const Container = styled.div<{ onVertical: boolean; todoCount: number }>`
     props.onVertical ? "1fr" : getColumnTemplate(props.todoCount)};
 `;
 
-const BoardContainer = styled.div<{ onVertical: boolean }>`
+const BoardContainer = styled.div<{ onVertical: boolean; snapshot: boolean }>`
   max-width: 550px;
   margin: ${(props) =>
     props.onVertical ? "0px 0px 20px" : "0px 20px 0px 0px"};
+  transition: box-shadow 0.3s ease-in-out;
+  box-shadow: ${(props) =>
+    props.snapshot
+      ? "0px 2px 15px 1px rgba(5,5,5,0.2)"
+      : "0px 1px 3px 0px rgba(5,5,5,0.2)"};
 `;
 
 export default function Home() {
   const [todos, setTodos] = useRecoilState(todoState);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const onDragEnd = ({
-    destination,
-    source,
-    draggableId,
-    type,
-  }: DropResult) => {
+  const onDragEnd = ({ destination, source, type }: DropResult) => {
     if (destination && type === "item") {
       if (destination.droppableId === source.droppableId) {
         setTodos((oldTodos) => {
@@ -55,8 +64,8 @@ export default function Home() {
           for (let oldTodo of oldTodos) {
             if (oldTodo.id + "" === destination.droppableId) {
               const newTodo = JSON.parse(JSON.stringify(oldTodo));
-              newTodo.contents.splice(source.index, 1);
-              newTodo.contents.splice(destination.index, 0, draggableId);
+              const temp = newTodo.contents.splice(source.index, 1)[0];
+              newTodo.contents.splice(destination.index, 0, temp);
               returnTodos.push(newTodo);
             } else {
               returnTodos.push(oldTodo);
@@ -66,21 +75,14 @@ export default function Home() {
         });
       } else {
         setTodos((oldTodos) => {
-          const returnTodos = [];
-          for (let oldTodo of oldTodos) {
-            if (oldTodo.id + "" === destination.droppableId) {
-              const newTodo = JSON.parse(JSON.stringify(oldTodo));
-              newTodo.contents.splice(destination.index, 0, draggableId);
-              returnTodos.push(newTodo);
-            } else if (oldTodo.id + "" === source.droppableId) {
-              const newTodo = JSON.parse(JSON.stringify(oldTodo));
-              newTodo.contents.splice(source.index, 1);
-              returnTodos.push(newTodo);
-            } else {
-              returnTodos.push(oldTodo);
-            }
-          }
-          return returnTodos;
+          const newTodos = JSON.parse(JSON.stringify(oldTodos));
+          let temp = newTodos
+            .find((v: any) => v.id + "" === source.droppableId)
+            .contents.splice(source.index, 1)[0];
+          newTodos
+            .find((v: any) => v.id + "" === destination.droppableId)
+            .contents.splice(destination.index, 0, temp);
+          return newTodos;
         });
       }
     } else if (destination && type === "group") {
@@ -123,8 +125,9 @@ export default function Home() {
                   index={index}
                   draggableId={value.id + ""}
                 >
-                  {(provided) => (
+                  {(provided, snapshot) => (
                     <BoardContainer
+                      snapshot={snapshot.isDropAnimating}
                       onVertical={windowWidth < 1000}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
