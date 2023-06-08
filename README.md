@@ -1,15 +1,15 @@
 Drag & Drop ToDoList
 ====================
 
-# https://lurgi.github.io/2305todo/
-## React-App
-## Styled-Components
-## Recoil
-## Beatuful-DND
+## https://lurgi.github.io/2305todo/
+#### React-App
+#### Styled-Components
+#### Recoil
+#### Beatuful-DND
 
-### 보드 컴포넌트 추가/삭제/수정/드래그 앤 드롭
-### 카드 컴포넌트 추가/삭제/수정/드래그 앤 드롭
-### LocalStorage 저장
+##### 보드 컴포넌트 추가/삭제/수정/드래그 앤 드롭
+##### 카드 컴포넌트 추가/삭제/수정/드래그 앤 드롭
+##### LocalStorage 저장
 
 -------------------------
 익힌 것들
