@@ -170,77 +170,81 @@ function Board({
   };
 
   return (
-    <Droppable droppableId={boardId} type="item">
-      {(magic, snapshot) => (
-        <Container ref={magic.innerRef} {...magic.droppableProps}>
-          <TitleContainer>
-            {isCategoryModify ? (
-              <TitleForm onSubmit={handleSubmit(onCategoryValid)}>
-                <TitleInput
-                  {...register("category", {
-                    value: category,
-                    required: true,
-                    maxLength: 20,
-                  })}
-                  onBlur={handleCategoryBlur}
-                />
-                <ChangeBtn type="submit">
-                  <FontAwesomeIcon
-                    icon={icon({ name: "arrows-rotate", style: "solid" })}
-                    style={{
-                      height: 18,
-                      width: 18,
-                    }}
-                  />
-                </ChangeBtn>
-              </TitleForm>
-            ) : (
-              <Title>{category}</Title>
-            )}
-            <BoardMenu
-              boardId={boardId}
-              category={category}
-              setFocus={setFocus}
-              setState={setIsCategoryModify}
-            />
-          </TitleContainer>
-          {contents.map((todo, index) => (
-            <DraggableBoard
-              key={index}
-              index={index}
-              content={todo.content}
-              contentId={todo.id}
-              category={category}
-            ></DraggableBoard>
-          ))}
-          {isAddBox ? (
-            <AddForm onSubmit={handleSubmit(onValid)}>
-              <AddInput
-                {...register("newContent", {
+    <>
+      <Container>
+        <TitleContainer>
+          {isCategoryModify ? (
+            <TitleForm onSubmit={handleSubmit(onCategoryValid)}>
+              <TitleInput
+                {...register("category", {
+                  value: category,
                   required: true,
+                  maxLength: 20,
                 })}
-                placeholder="Write..."
-                onBlur={handleBlur}
+                onBlur={handleCategoryBlur}
               />
-              <AddBtn type="submit">
+              <ChangeBtn type="submit">
                 <FontAwesomeIcon
-                  icon={icon({ name: "plus", style: "solid" })}
-                  style={{ height: 16, width: 16 }}
+                  icon={icon({ name: "arrows-rotate", style: "solid" })}
+                  style={{
+                    height: 18,
+                    width: 18,
+                  }}
                 />
-              </AddBtn>
-            </AddForm>
-          ) : null}
-          <AddIconDiv onClick={handleAdd}>
-            <FontAwesomeIcon
-              icon={icon({ name: "plus", style: "solid" })}
-              style={{ height: 16, width: 16, marginRight: 2 }}
+              </ChangeBtn>
+            </TitleForm>
+          ) : (
+            <Title>{category}</Title>
+          )}
+          <BoardMenu
+            boardId={boardId}
+            category={category}
+            setFocus={setFocus}
+            setState={setIsCategoryModify}
+          />
+        </TitleContainer>
+        <Droppable droppableId={boardId} type="item">
+          {(magic, snapshot) => (
+            <div ref={magic.innerRef} {...magic.droppableProps}>
+              {contents.map((todo, index) => (
+                <DraggableBoard
+                  key={index}
+                  index={index}
+                  content={todo.content}
+                  contentId={todo.id}
+                  category={category}
+                ></DraggableBoard>
+              ))}
+              {magic.placeholder}
+            </div>
+          )}
+        </Droppable>
+        {isAddBox ? (
+          <AddForm onSubmit={handleSubmit(onValid)}>
+            <AddInput
+              {...register("newContent", {
+                required: true,
+              })}
+              placeholder="Write..."
+              onBlur={handleBlur}
             />
-            {`${category} 추가하기`}
-          </AddIconDiv>
-          {magic.placeholder}
-        </Container>
-      )}
-    </Droppable>
+            <AddBtn type="submit">
+              <FontAwesomeIcon
+                icon={icon({ name: "plus", style: "solid" })}
+                style={{ height: 16, width: 16 }}
+              />
+            </AddBtn>
+          </AddForm>
+        ) : null}
+        <AddIconDiv onClick={handleAdd}>
+          <FontAwesomeIcon
+            icon={icon({ name: "plus", style: "solid" })}
+            style={{ height: 16, width: 16, marginRight: 2 }}
+          />
+          {`${category} 추가하기`}
+        </AddIconDiv>
+      </Container>
+    </>
   );
 }
 
