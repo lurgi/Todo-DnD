@@ -5,20 +5,11 @@ import {
   Droppable,
 } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
-import { keyframes, styled } from "styled-components";
+import { styled } from "styled-components";
 import { todoState } from "./atoms";
 import Board from "./dnds/Board";
 import AddCategroy from "./components/AddCategory";
 import { useEffect, useState } from "react";
-
-const fadeIn = keyframes`
-  from{
-    opacity: 0;
-  }
-  to{
-    opacity: 1;
-  }
-`;
 
 const HomeContainer = styled.div`
   padding-top: 50px;

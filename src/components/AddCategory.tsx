@@ -38,6 +38,7 @@ const IconBox = styled.div`
 
 const Container = styled.div`
   width: 100%;
+  max-width: 550px;
   background-color: ${(props) => props.theme.cardBgColor};
   padding: 15px;
   border-radius: 5px;
