@@ -1,7 +1,7 @@
 Drag & Drop ToDoList
 ====================
 
-Link : [ToDoApp](https://lurgi.github.io/2305todo/)
+Link : [ToDoApp](https://lurgi.github.io/Todo-DnD/)
 #### React-App
 #### Styled-Components
 #### Recoil
