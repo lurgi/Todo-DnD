@@ -55,5 +55,5 @@
   "devDependencies": {
     "@types/react-beautiful-dnd": "^13.1.4"
   },
-  "homepage": "https://lurgi.github.io/2305todo"
+  "homepage": "https://lurgi.github.io/Todo-DnD"
 }
